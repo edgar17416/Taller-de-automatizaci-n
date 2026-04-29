@@ -1,62 +1,103 @@
-#include <stdio.h>
+#include <iostream>
+#include <math.h>
+using namespace std;
 
-// Calcula factorial
 double factorial(int n) {
-    double r = 1.0;
-    for (int i = 1; i <= n; i++) r *= i;
-    return r;
-}
+    double resultado = 1;
 
-// Calcula potencia
-double potencia(double x, int n) {
-    double r = 1.0;
-    for (int i = 0; i < n; i++) r *= x;
-    return r;
-}
-
-// Aproximación de e^x
-double exp_taylor(double x, int n) {
-    double s = 0.0;
-    for (int i = 0; i < n; i++) {
-        s += potencia(x, i) / factorial(i);
+    for (int i = 1; i <= n; i++) {
+        resultado = resultado * i;
     }
-    return s;
+
+    return resultado;
 }
 
-// Aproximación de sin(x)
-double sin_taylor(double x, int n) {
-    double s = 0.0;
+double senoTaylor(double x, int n) {
+    double suma = 0;
+
     for (int i = 0; i < n; i++) {
-        int signo = (i % 2 == 0) ? 1 : -1;
-        s += signo * potencia(x, 2*i + 1) / factorial(2*i + 1);
+        suma = suma + (pow(-1, i) * pow(x, 2 * i + 1)) / factorial(2 * i + 1);
     }
-    return s;
+
+    return suma;
 }
 
-// Aproximación de cos(x)
-double cos_taylor(double x, int n) {
-    double s = 0.0;
+double cosenoTaylor(double x, int n) {
+    double suma = 0;
+
     for (int i = 0; i < n; i++) {
-        int signo = (i % 2 == 0) ? 1 : -1;
-        s += signo * potencia(x, 2*i) / factorial(2*i);
+        suma = suma + (pow(-1, i) * pow(x, 2 * i)) / factorial(2 * i);
     }
-    return s;
+
+    return suma;
+}
+
+double exponencialTaylor(double x, int n) {
+    double suma = 0;
+
+    for (int i = 0; i < n; i++) {
+        suma = suma + pow(x, i) / factorial(i);
+    }
+
+    return suma;
+}
+
+double logaritmoTaylor(double x, int n) {
+    double suma = 0;
+
+    if (x <= -1) {
+        return 0;
+    }
+
+    for (int i = 1; i <= n; i++) {
+        suma = suma + (pow(-1, i + 1) * pow(x, i)) / i;
+    }
+
+    return suma;
 }
 
 int main() {
+    int opcion;
     double x;
-    int n;
+    int terminos;
 
-    printf("Valor de x: ");
-    scanf("%lf", &x);
+    cout << "SERIES DE TAYLOR" << endl;
+    cout << "1. Seno(x)" << endl;
+    cout << "2. Coseno(x)" << endl;
+    cout << "3. Exponencial(e^x)" << endl;
+    cout << "4. Logaritmo ln(1+x)" << endl;
+    cout << "Seleccione una opcion: ";
+    cin >> opcion;
 
-    printf("Numero de terminos: ");
-    scanf("%d", &n);
+    cout << "Ingrese el valor de x: ";
+    cin >> x;
 
-    printf("\nResultados:\n");
-    printf("e^x ≈ %lf\n", exp_taylor(x, n));
-    printf("sin(x) ≈ %lf\n", sin_taylor(x, n));
-    printf("cos(x) ≈ %lf\n", cos_taylor(x, n));
+    cout << "Ingrese la cantidad de terminos: ";
+    cin >> terminos;
+
+    if (terminos <= 0) {
+        cout << "La cantidad de terminos debe ser mayor que cero." << endl;
+        return 0;
+    }
+
+    if (opcion == 1) {
+        cout << "Aproximacion seno(" << x << ") = " << senoTaylor(x, terminos) << endl;
+    }
+    else if (opcion == 2) {
+        cout << "Aproximacion coseno(" << x << ") = " << cosenoTaylor(x, terminos) << endl;
+    }
+    else if (opcion == 3) {
+        cout << "Aproximacion e^" << x << " = " << exponencialTaylor(x, terminos) << endl;
+    }
+    else if (opcion == 4) {
+        if (x <= -1) {
+            cout << "Para ln(1+x), x debe ser mayor que -1." << endl;
+        } else {
+            cout << "Aproximacion ln(1+" << x << ") = " << logaritmoTaylor(x, terminos) << endl;
+        }
+    }
+    else {
+        cout << "Opcion invalida." << endl;
+    }
 
     return 0;
-}
