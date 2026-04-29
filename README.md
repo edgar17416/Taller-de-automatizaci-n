@@ -40,5 +40,7 @@ Salida esperada:
 e^x ≈ 2.718282
 sin(x) ≈ 0.841471
 cos(x) ≈ 0.540302
+
+
 A mayor número de términos, mayor precisión en los resultados.
 El programa utiliza implementaciones propias de factorial y potencia.
