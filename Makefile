@@ -1,26 +1,22 @@
-# Compilador
 CXX = g++
+CXXFLAGS = -Wall -std=c++11
+SRC = Taylor.cpp
 
-# Flags de compilación
-CXXFLAGS = -Wall -Wextra -std=c++11
+ifeq ($(OS),Windows_NT)
+	TARGET = programa.exe
+	RUN = ./programa.exe
+	DEL = del /Q
+else
+	TARGET = programa
+	RUN = ./programa
+	DEL = rm -f
+endif
 
-# Nombre del ejecutable
-TARGET = taylor
+build:
+	$(CXX) $(CXXFLAGS) $(SRC) -o $(TARGET)
 
-# Archivo fuente
-SRC = taylor.cpp
+run: build
+	$(RUN)
 
-# Regla principal
-all: $(TARGET)
-
-# Compilación
-$(TARGET): $(SRC)
-	$(CXX) $(SRC) -o $(TARGET) $(CXXFLAGS)
-
-# Ejecutar (opcional)
-run: $(TARGET)
-	./$(TARGET)
-
-# Limpiar
 clean:
-	rm -f $(TARGET)
+	$(DEL) $(TARGET)
